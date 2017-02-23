@@ -53,6 +53,7 @@
     <Compile Include="UnityAssetstoreAsset.cs" />
     <Compile Include="UnityAssetstoreRequest.cs" />
     <Compile Include="UnityAssetstoreUser.cs" />
+    <Compile Include="wrapper\AssetstoreUserOverviewWrapper.cs" />
     <Compile Include="wrapper\AssetstoreUserWrapper.cs" />
   </ItemGroup>
   <ItemGroup>
