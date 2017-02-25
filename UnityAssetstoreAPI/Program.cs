@@ -14,9 +14,10 @@ namespace UnityAssetstoreAPI
         {
             UnityAssetstoreUser a = new UnityAssetstoreUser();
             AssetstoreUserWrapper b = a.UserLogin("", "");
-            Console.WriteLine(b.XUnitySession);
+            //Console.WriteLine(b.XUnitySession);
 
             a.GetDownloadableAssets();
+            Console.WriteLine(a.GetUserOverview(a.UserObject.ID));
         }
     }
 }
