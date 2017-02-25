@@ -13,7 +13,7 @@ namespace UnityAssetstoreAPI
     {
         public static string Domain = "https://www.assetstore.unity3d.com";
         public static string UserAgent = "Mozilla/5.0 (Windows NT 6.3; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/56.0.2924.87 Safari/537.36";
-        public static string KharmaVersion = "5.5.0-r88049";
+        public static string KharmaVersion = "5.5.0-r88051";
         public static string RequestedWith = "UnityAssetStore";
         public static string UnitySession = "";
         public static CookieContainer cookieContainerAssetstore = new CookieContainer();
@@ -90,6 +90,10 @@ namespace UnityAssetstoreAPI
                     else if (resp.StatusCode == HttpStatusCode.Unauthorized)
                     {
                     }
+                    else if (resp.StatusCode == HttpStatusCode.Conflict)
+                    {
+                        // need to update kharma version
+                    }
                 }
 
                 return default(T);
@@ -114,6 +118,10 @@ namespace UnityAssetstoreAPI
                     else if (resp.StatusCode == HttpStatusCode.Unauthorized)
                     {
                     }
+                    else if (resp.StatusCode == HttpStatusCode.Conflict)
+                    {
+                        // need to update kharma version
+                    }
                 }
 
                 return null;
@@ -137,6 +145,10 @@ namespace UnityAssetstoreAPI
                     }
                     else if (resp.StatusCode == HttpStatusCode.Unauthorized)
                     {
+                    }
+                    else if (resp.StatusCode == HttpStatusCode.Conflict)
+                    {
+                        // need to update kharma version
                     }
                 }
 

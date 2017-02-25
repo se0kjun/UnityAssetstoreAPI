@@ -32,7 +32,7 @@ namespace UnityAssetstoreAPI
             string loginParameter = string.Format("license_hash=&hardware_hash=&language_code=kr&current_package_id=&user={0}&pass={1}", 
                 HttpUtility.UrlEncode(id), HttpUtility.UrlEncode(password));
 
-            userAuthenticate = UnityAssetstoreRequest.GetResponseToJson<AssetstoreUserWrapper>(USER_LOGIN_URL, "application/json", "application/x-www-form-urlencoded; charset=UTF-8", "", "POST", loginParameter);
+            UnityAssetstoreRequest.KharmaVersion = userAuthenticate.KharmaVersion;
             UnityAssetstoreRequest.UnitySession = userAuthenticate.XUnitySession;
 
             return userAuthenticate;
