@@ -55,6 +55,7 @@
     <Compile Include="UnityAssetstoreUser.cs" />
     <Compile Include="wrapper\AssetstoreContentOverviewWrapper.cs" />
     <Compile Include="wrapper\AssetstoreContentWrapper.cs" />
+    <Compile Include="wrapper\AssetstoreDownloadInfoWrapper.cs" />
     <Compile Include="wrapper\AssetstoreUserOverviewWrapper.cs" />
     <Compile Include="wrapper\AssetstoreUserWrapper.cs" />
   </ItemGroup>
