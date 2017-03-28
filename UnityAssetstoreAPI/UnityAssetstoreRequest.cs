@@ -1,8 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 using Newtonsoft.Json;
 using System.Net;
 using System.IO;
@@ -39,9 +36,9 @@ namespace UnityAssetstoreAPI
                 }
             }
 
-            Uri uri = new Uri(url); // string 을 Uri 로 형변환
-            requestAssetstore = (HttpWebRequest)WebRequest.Create(uri); // WebRequest 객체 형성 및 HttpWebRequest 로 형변환
-            requestAssetstore.Method = method; // 전송 방법 "GET" or "POST"
+            Uri uri = new Uri(url); 
+            requestAssetstore = (HttpWebRequest)WebRequest.Create(uri); 
+            requestAssetstore.Method = method;
             requestAssetstore.Accept = accept;
             requestAssetstore.ContentType = content_type;
             requestAssetstore.Host = "www.assetstore.unity3d.com";

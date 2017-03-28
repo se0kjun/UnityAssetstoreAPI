@@ -1,7 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using UnityAssetstoreAPI.wrapper;
 using System.Net;
@@ -17,7 +15,8 @@ namespace UnityAssetstoreAPI
         private const string ASSET_OVERVIEW_URL = "https://www.assetstore.unity3d.com/api/ko-KR/content/overview/{0}.json";
         private const string ASSET_DOWNLOAD_URL = "https://www.assetstore.unity3d.com/api/ko-KR/content/download/{0}.json";
 
-        private string packageKey;
+        private string ASSET_DOWNLOAD_PATH = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "Unity", "Asset Store-5.x");
+        private AssetstoreDownloadInfoWrapper downloadInfo;
 
         public UnityAssetstoreAsset()
         {
@@ -61,31 +60,56 @@ namespace UnityAssetstoreAPI
             return data;
         }
 
-        public void GetDownloadAsset(int id)
+        public async Task<byte[]> GetDownloadAssetTaskAsync(int id)
         {
             JObject assets = JObject.FromObject(UnityAssetstoreRequest.GetResponseToJson
                 (string.Format(ASSET_DOWNLOAD_URL, id), "*/*", "", "", "GET", ""));
 
-            JToken info = assets["download"];
-            packageKey = info.Value<string>("key");
+            downloadInfo = assets["download"].ToObject<AssetstoreDownloadInfoWrapper>();
 
             using (WebClient wc = new WebClient())
             {
-                wc.DownloadDataAsync(new Uri(info.Value<string>("url")));
+                wc.DownloadDataCompleted += DownloadDataCompleted;
+                return await wc.DownloadDataTaskAsync(new Uri(downloadInfo.URL));
+            }
+        }
+
+        public AssetstoreDownloadInfoWrapper GetDownloadAssetAsync(int id)
+        {
+            JObject assets = JObject.FromObject(UnityAssetstoreRequest.GetResponseToJson
+                (string.Format(ASSET_DOWNLOAD_URL, id), "*/*", "", "", "GET", ""));
+
+            downloadInfo = assets["download"].ToObject<AssetstoreDownloadInfoWrapper>();
+
+            using (WebClient wc = new WebClient())
+            {
+                wc.DownloadDataAsync(new Uri(downloadInfo.URL));
                 wc.DownloadDataCompleted += DownloadDataCompleted;
             }
+
+            return downloadInfo;
         }
 
         private void DownloadDataCompleted(object sender, DownloadDataCompletedEventArgs e)
         {
-            Console.WriteLine("COMPLETE");
+            if (!Directory.Exists(Path.Combine(ASSET_DOWNLOAD_PATH, downloadInfo.PublisherName, downloadInfo.CategoryName)))
+            {
+                Directory.CreateDirectory(Path.Combine(ASSET_DOWNLOAD_PATH, downloadInfo.PublisherName, downloadInfo.CategoryName));
+            }
+
             Decrypt(e.Result);
             Console.WriteLine("DONE");
         }
 
+        public bool CheckUpdate(int id)
+        {
+
+            return false;
+        }
+
         private void Decrypt(byte[] data)
         {
-            byte[] src = ToByteArray(packageKey);
+            byte[] src = ToByteArray(downloadInfo.Key);
 
             byte[] keyhash = new byte[32];
             Array.Copy(src, 0, keyhash, 0, 32);
@@ -105,14 +129,14 @@ namespace UnityAssetstoreAPI
                 using (Stream encrypted = new MemoryStream(data),
                        decrypted = new CryptoStream(encrypted, rijndaelManaged.CreateDecryptor(keyhash, ivhash), CryptoStreamMode.Read),
                        copy = new MemoryStream(),
-                       fileStream = File.Create("test2.unitypackage"))
+                       fileStream = File.Create(Path.Combine(ASSET_DOWNLOAD_PATH, downloadInfo.PublisherName, downloadInfo.CategoryName, downloadInfo.FileName + ".unitypackage")))
                 {
                     decrypted.CopyTo(fileStream);
                 }
             }
         }
 
-        public byte[] ToByteArray(String HexString)
+        public byte[] ToByteArray(string HexString)
         {
             int NumberChars = HexString.Length;
             byte[] bytes = new byte[NumberChars / 2];
