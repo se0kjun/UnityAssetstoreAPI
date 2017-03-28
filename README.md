@@ -11,6 +11,30 @@
 - Get overview of asset
 - Sign in
 
+
+## Usage
+
+```csharp
+
+// console version
+static void Main(string[] args)
+{
+    UnityAssetstoreUser user = new UnityAssetstoreUser();
+
+	// login to assetstore account
+    user.UserLogin("your ID", "your password");
+	// get assets can be downloaded
+	List<int> ids = user.GetDownloadableAssets();
+
+    UnityAssetstoreAsset asset = new UnityAssetstoreAsset();
+
+	// download asset
+    var t = aa.GetDownloadAssetTaskAsync(ids[0]);
+    Task.WaitAll(t);
+}
+
+```
+
 ## Wrapper class
 
 [AssetstoreUserWrapper](https://github.com/se0kjun/UnityAssetstoreAPI/blob/master/UnityAssetstoreAPI/wrapper/AssetstoreUserWrapper.cs)
