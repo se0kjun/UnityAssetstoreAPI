@@ -76,7 +76,8 @@ Return Type: AssetstoreUserOverviewWrapper
 
 Get user overview corresponding to user id (not email).
 
-### Asset
+### UnityAssetstoreAsset
+
 
 #### GetAssetOverview(int id)
 
