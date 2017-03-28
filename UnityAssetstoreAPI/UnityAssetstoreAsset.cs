@@ -101,12 +101,6 @@ namespace UnityAssetstoreAPI
             Console.WriteLine("DONE");
         }
 
-        public bool CheckUpdate(int id)
-        {
-
-            return false;
-        }
-
         private void Decrypt(byte[] data)
         {
             byte[] src = ToByteArray(downloadInfo.Key);
@@ -136,7 +130,7 @@ namespace UnityAssetstoreAPI
             }
         }
 
-        public byte[] ToByteArray(string HexString)
+        private byte[] ToByteArray(string HexString)
         {
             int NumberChars = HexString.Length;
             byte[] bytes = new byte[NumberChars / 2];
